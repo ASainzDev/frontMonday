@@ -1,9 +1,13 @@
 
 // Con estas interfaces intento mapear un workspace en concreto y sus distintos Boards. Por ahora los generales.
-export interface Workspace {
+export interface MondayResponse {
+    workspaces: Workspace[],
+    boards: Board[];
+}
+
+export interface Workspace{
     id: string;
     name: string;
-    boards: Board[];
 }
 
 // Esta es la interface que mapea los Boards concretos

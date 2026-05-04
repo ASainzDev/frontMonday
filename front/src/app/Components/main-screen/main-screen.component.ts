@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { InitService } from '../../services/init.service';
-import { Workspace } from '../../interfaces/workspace.interface';
+import { MondayResponse } from '../../interfaces/workspace.interface';
 
 @Component({
   selector: 'app-main-screen',
@@ -12,14 +12,15 @@ export class MainScreenComponent implements OnInit{
 
   initService = inject(InitService);
 
-  workspace: Workspace [];
+  workspace = signal<MondayResponse>({
+    workspaces: [],
+    boards: []
+  });
 
-  constructor(){
-    this.workspace = []
-    }
+  
 
   async ngOnInit(){
-    this.workspace = await this.initService.getWorkspace();
-    console.log(this.workspace);
+    const data: MondayResponse = await this.initService.getWorkspace();
+    this.workspace.set(data);
   }
 }
