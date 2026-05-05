@@ -20,7 +20,10 @@ export class MainScreenComponent implements OnInit{
   
 
   async ngOnInit(){
-    const data: MondayResponse = await this.initService.getWorkspace();
-    this.workspace.set(data);
+    // const data: MondayResponse = await this.initService.getWorkspace();
+    // this.workspace.set(data);
+    this.initService.getWorkspace().subscribe((mondayObject: MondayResponse) => {
+      this.workspace.set(mondayObject);
+    })
   }
 }
