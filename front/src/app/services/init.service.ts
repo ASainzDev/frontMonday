@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { baseUrl } from '../Navigation/navigation';
 import { MondayResponse } from '../interfaces/workspace.interface';
 import { lastValueFrom, Observable } from 'rxjs';
+import { WorkspacesList } from '../interfaces/workspaces-list.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -17,11 +18,10 @@ export class InitService {
 
   // Creo el método que va a traer los primeros datos del back
 
-  getWorkspace(): Observable<MondayResponse>{
+  getWorkspace(): Observable<WorkspacesList[]>{
 
-   return this.http.post<MondayResponse>(`${baseUrl}/handshake`, {});
+   return this.http.post<WorkspacesList[]>(`${baseUrl}/workspaces`, {});
+   
   }
-
-
 
 }

@@ -23,7 +23,7 @@ export interface Board {
 // Interface para los grupos que puede tener un tablero.
 export interface Group {
     id: string;
-    name: string;
+    title: string;
     color: string;
 }
 

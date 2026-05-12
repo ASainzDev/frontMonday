@@ -1,0 +1,57 @@
+<div data-theme="synthwave" class="font-sans">
+
+    <div class="w-screen h-screen overflow-hidden flex">
+
+        <aside class="w-80 border-r border-gray-200 flex-shrink-0 overflow-y-auto">
+            <div class="h-16 flex items-center px-6 border-b border-gray-200">
+                <span class="font-bold text-xl">Mi Dashboard</span>
+            </div>
+
+            <nav class="p-4 space-y-2">
+                <ul class="list bg-base-100 rounded-box shadow-md">
+
+                <li class="p-4 pb-2 text-xs uppercase font-extralight tracking-wide">Listado de Workspaces de la cuenta</li>
+                
+                @for(workspace of workspaceList(); track workspace.id){
+                    <li class="list-row border-2 mt-1">
+
+                        <div class="text-xs font-extralight">{{workspace.id}}</div>
+                        <div class="uppercase font-light text-xs">{{workspace.name}}</div>
+                        
+                        <button class="btn btn-square btn-ghost" (click)="navigateToWorkspace(workspace.id)">
+                            <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none"
+                                    stroke="white">
+                                    <path d="M6 3L20 12 6 21 6 3z"></path>
+                                </g>
+                            </svg>
+                        </button>
+                        
+                    </li>
+                }@empty {
+                     <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">No existe ningún Workspace en la lista</li>
+                }
+                </ul>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <header class="h-16 flex items-center justify-between px-6 border-gray-200 flex-shrink-0">
+                <h1 class="text-lg font-semibold ">Panel de Control</h1>
+                <div class="flex items-center gap-4">
+                    <button>Notificaciones</button>
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                        IN
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-6">
+
+                <router-outlet></router-outlet>
+
+            </main>
+        </div>
+    </div>
+</div>
