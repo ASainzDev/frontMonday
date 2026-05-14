@@ -5,3 +5,5 @@
 export const baseUrl: string = 'http://localhost:3000/monday';
 
 export const boardEndp: string = '/boards';
+
+export const boardData: string = '/boardData';

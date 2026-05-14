@@ -13,7 +13,7 @@
                 <li class="p-4 pb-2 text-xs uppercase font-extralight tracking-wide">Listado de Workspaces de la cuenta</li>
                 
                 @for(workspace of workspaceList(); track workspace.id){
-                    <li class="list-row border-2 mt-1">
+                    <li class="list-row border-2 mt-1 hover:bg-sky-800">
 
                         <div class="text-xs font-extralight">{{workspace.id}}</div>
                         <div class="uppercase font-light text-xs">{{workspace.name}}</div>

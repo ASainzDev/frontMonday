@@ -25,7 +25,6 @@ export class WComponentListComponent implements OnInit{
   ngOnInit(){
     this.initSer.getWorkspace().subscribe((workspaces: WorkspacesList[]) => {
       this.workspaceList.set(workspaces);
-      
     })
   }
 

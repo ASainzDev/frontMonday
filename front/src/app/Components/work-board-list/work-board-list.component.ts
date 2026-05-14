@@ -11,7 +11,7 @@ import { Board } from '../../interfaces/workspace.interface';
   styleUrl: './work-board-list.component.css',
 })
 
-export class WorkBoardListComponent implements OnInit{
+export class WorkBoardListComponent implements OnInit {
 
   // Inyectamos ActivatedRoute
   private activeR: ActivatedRoute = inject(ActivatedRoute);
@@ -27,25 +27,21 @@ export class WorkBoardListComponent implements OnInit{
   boards = signal<Partial<Board>[]>([]);
 
   // En el ngOnInit debo de setear el signal y hacer la petición para cargar datos desde el backend
-  ngOnInit(){
-    console.log("He llegado al componente");
-    this.activeR.params.subscribe((params: any) => {
-      
-      this.workspace_ids.set(params.workspace_ids);
-      console.log(`He navegado hasta aquí con el valor ${this.workspace_ids}`);
+  ngOnInit() {
 
-    this.boardService.getBoardsOfAWorkspace(this.workspace_ids()).subscribe(boardList => {
-      
-      console.log(boardList);
-      
-      if(boardList){
-        this.boards.set(boardList);
-        console.log(boardList);
-      }
-      
-   
-      }); 
-      
+    this.activeR.params.subscribe((params: any) => {
+
+      this.workspace_ids.set(params.workspace_ids);
+
+      this.boardService.getBoardsOfAWorkspace(this.workspace_ids()).subscribe(boardList => {
+
+
+        if (boardList) {
+          this.boards.set(boardList);
+        }
+
+      });
+
     })
   }
 
