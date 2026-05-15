@@ -1,6 +1,5 @@
-import { Component, inject, OnInit, Signal, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { BoardService } from '../../services/board.service';
 import { Board } from '../../interfaces/workspace.interface';
 
@@ -8,44 +7,39 @@ import { Board } from '../../interfaces/workspace.interface';
   selector: 'app-work-board-list',
   imports: [],
   templateUrl: './work-board-list.component.html',
-  styleUrl: './work-board-list.component.css',
 })
-
 export class WorkBoardListComponent implements OnInit {
-
-  // Inyectamos ActivatedRoute
-  private activeR: ActivatedRoute = inject(ActivatedRoute);
-
-  // Defino una variable que va a almacenar el valor de la id del workspace que viene por parametro de baseUrl
-  workspace_ids = signal<string>("");
-
-  // Inyecto el servicio de boards
+  private activeR = inject(ActivatedRoute);
   private boardService = inject(BoardService);
 
-  // Defino un Partial de Board
-
+  workspaceId = signal('');
   boards = signal<Partial<Board>[]>([]);
+  loading = signal(true);
+  error = signal<string | null>(null);
 
-  // En el ngOnInit debo de setear el signal y hacer la petición para cargar datos desde el backend
   ngOnInit() {
+    this.activeR.params.subscribe((params: { workspace_ids?: string }) => {
+      const id = params.workspace_ids ?? '';
+      this.workspaceId.set(id);
 
-    this.activeR.params.subscribe((params: any) => {
+      if (!id) {
+        this.loading.set(false);
+        return;
+      }
 
-      this.workspace_ids.set(params.workspace_ids);
+      this.loading.set(true);
+      this.error.set(null);
 
-      this.boardService.getBoardsOfAWorkspace(this.workspace_ids()).subscribe(boardList => {
-
-
-        if (boardList) {
-          this.boards.set(boardList);
-        }else{
-          return console.log("No se ha recibido ningún dato de la petición requerida");
-        }
-
+      this.boardService.getBoardsOfAWorkspace(id).subscribe({
+        next: (boardList) => {
+          this.boards.set(boardList ?? []);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.error.set('No se pudieron cargar los tableros de este workspace.');
+          this.loading.set(false);
+        },
       });
-
-    })
+    });
   }
-
-
 }

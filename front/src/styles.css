@@ -1,4 +1,74 @@
 @import "tailwindcss";
-@plugin "daisyui"{
-    themes: dark, light,retro, luxury, synthwave;
+
+@plugin "daisyui" {
+  themes: monday --default;
+}
+
+@plugin "daisyui/theme" {
+  name: "monday";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #181b34;
+  --color-base-200: #1f2342;
+  --color-base-300: #2b2f4e;
+  --color-base-content: #d5d8df;
+
+  --color-primary: #6161ff;
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #5034ff;
+  --color-secondary-content: #ffffff;
+
+  --color-accent: #00c875;
+  --color-accent-content: #ffffff;
+
+  --color-neutral: #383e5c;
+  --color-neutral-content: #c5c7d0;
+
+  --color-info: #579bfc;
+  --color-success: #00c875;
+  --color-warning: #fdab3d;
+  --color-error: #e2445c;
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.75rem;
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-base-100 text-base-content min-h-screen;
+    font-family:
+      "Figtree",
+      "Segoe UI",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+}
+
+@layer components {
+  .monday-sidebar-item {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors;
+    @apply text-base-content/80 hover:bg-base-300/60 hover:text-base-content;
+  }
+
+  .monday-sidebar-item--active {
+    @apply bg-primary/15 text-primary font-medium;
+  }
+
+  .monday-board-card {
+    @apply rounded-xl border border-base-300/80 bg-base-200/50 backdrop-blur-sm;
+    @apply transition-all duration-200 hover:border-primary/40 hover:bg-base-200 hover:shadow-lg hover:shadow-primary/5;
+  }
+
+  .monday-group-pill {
+    @apply inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-semibold uppercase tracking-wide;
+  }
 }

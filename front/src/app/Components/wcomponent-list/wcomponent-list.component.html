@@ -1,57 +1,135 @@
-<div data-theme="synthwave" class="font-sans">
+<div class="flex h-screen w-full overflow-hidden bg-base-100">
 
-    <div class="w-screen h-screen overflow-hidden flex">
+  <aside class="flex w-64 shrink-0 flex-col border-r border-base-300/60 bg-base-200/40">
 
-        <aside class="w-80 border-r border-gray-200 flex-shrink-0 overflow-y-auto">
-            <div class="h-16 flex items-center px-6 border-b border-gray-200">
-                <span class="font-bold text-xl">Mi Dashboard</span>
-            </div>
-
-            <nav class="p-4 space-y-2">
-                <ul class="list bg-base-100 rounded-box shadow-md">
-
-                <li class="p-4 pb-2 text-xs uppercase font-extralight tracking-wide">Listado de Workspaces de la cuenta</li>
-                
-                @for(workspace of workspaceList(); track workspace.id){
-                    <li class="list-row border-2 mt-1 hover:bg-sky-800">
-
-                        <div class="text-xs font-extralight">{{workspace.id}}</div>
-                        <div class="uppercase font-light text-xs">{{workspace.name}}</div>
-                        
-                        <button class="btn btn-square btn-ghost" (click)="navigateToWorkspace(workspace.id)">
-                            <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none"
-                                    stroke="white">
-                                    <path d="M6 3L20 12 6 21 6 3z"></path>
-                                </g>
-                            </svg>
-                        </button>
-                        
-                    </li>
-                }@empty {
-                     <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">No existe ningún Workspace en la lista</li>
-                }
-                </ul>
-            </nav>
-        </aside>
-
-        <div class="flex-1 flex flex-col overflow-hidden">
-
-            <header class="h-16 flex items-center justify-between px-6 border-gray-200 flex-shrink-0">
-                <h1 class="text-lg font-semibold ">Panel de Control</h1>
-                <div class="flex items-center gap-4">
-                    <button>Notificaciones</button>
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
-                        IN
-                    </div>
-                </div>
-            </header>
-
-            <main class="flex-1 overflow-y-auto p-6">
-
-                <router-outlet></router-outlet>
-
-            </main>
-        </div>
+    <div class="flex h-14 items-center gap-2.5 border-b border-base-300/60 px-4">
+      <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-content">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h10" />
+        </svg>
+      </div>
+      <span class="text-sm font-semibold tracking-tight text-base-content">Workspaces</span>
     </div>
+
+    <nav class="flex-1 overflow-y-auto p-3">
+      <p class="mb-2 px-2 text-[10px] font-semibold uppercase tracking-widest text-base-content/45">
+        Tus espacios
+      </p>
+
+      @if (loading()) {
+        <ul class="space-y-2 px-1">
+          @for (_ of [1, 2, 3]; track $index) {
+            <li class="skeleton h-10 w-full rounded-lg"></li>
+          }
+        </ul>
+      } @else if (error()) {
+        <div class="alert alert-error alert-soft text-xs py-2">{{ error() }}</div>
+      } @else {
+        <ul class="space-y-0.5">
+          @for (workspace of workspaceList(); track workspace.id) {
+            <li>
+              <a
+                [routerLink]="['/home/board', workspace.id]"
+                routerLinkActive="monday-sidebar-item--active"
+                class="monday-sidebar-item group"
+              >
+                <span
+                  class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/20 text-xs font-bold text-primary"
+                >
+                  {{ workspace.name.charAt(0).toUpperCase() }}
+                </span>
+                <span class="min-w-0 flex-1 truncate">{{ workspace.name }}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-60"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            </li>
+          } @empty {
+            <li class="rounded-lg border border-dashed border-base-300/80 px-3 py-6 text-center text-xs text-base-content/50">
+              No hay workspaces disponibles
+            </li>
+          }
+        </ul>
+      }
+    </nav>
+
+    <div class="border-t border-base-300/60 p-3">
+      <div class="flex items-center gap-2 rounded-lg bg-base-300/30 px-3 py-2">
+        <div class="avatar placeholder">
+          <div class="w-8 rounded-full bg-primary text-primary-content">
+            <span class="text-xs font-bold">U</span>
+          </div>
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-xs font-medium">Usuario</p>
+          <p class="truncate text-[10px] text-base-content/50">Conectado</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+
+    <header class="flex h-14 shrink-0 items-center justify-between border-b border-base-300/60 bg-base-100/80 px-6 backdrop-blur-md">
+      <div>
+        <h1 class="text-base font-semibold text-base-content">Panel de control</h1>
+        <p class="text-xs text-base-content/50">Gestiona tus tableros de Monday.com</p>
+      </div>
+      <div class="flex items-center gap-1">
+        <button type="button" class="btn btn-ghost btn-sm btn-circle" aria-label="Buscar">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+        <button type="button" class="btn btn-ghost btn-sm btn-circle" aria-label="Notificaciones">
+          <div class="indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <span class="badge badge-primary badge-xs indicator-item"></span>
+          </div>
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto bg-base-100 p-6">
+      @if (loading()) {
+        <div class="space-y-3">
+          <div class="skeleton h-8 w-48 rounded-lg"></div>
+          <div class="skeleton h-40 w-full rounded-xl"></div>
+        </div>
+      } @else if (error()) {
+        <div class="alert alert-error alert-soft max-w-md">{{ error() }}</div>
+      } @else if (workspaceList().length === 0) {
+        <div class="flex h-full min-h-[320px] flex-col items-center justify-center text-center">
+          <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h2 class="text-lg font-semibold">Sin workspaces</h2>
+          <p class="mt-1 max-w-sm text-sm text-base-content/55">Conecta tu cuenta de Monday.com para ver tus espacios de trabajo.</p>
+        </div>
+      } @else {
+        <router-outlet />
+        @if (!isBoardView()) {
+          <div class="flex h-full min-h-[320px] flex-col items-center justify-center text-center">
+            <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+            <h2 class="text-lg font-semibold">Selecciona un workspace</h2>
+            <p class="mt-1 max-w-sm text-sm text-base-content/55">Elige un espacio en la barra lateral para ver sus tableros.</p>
+          </div>
+        }
+      }
+    </main>
+  </div>
 </div>

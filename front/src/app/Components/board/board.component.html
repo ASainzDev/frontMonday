@@ -1,6 +1,52 @@
-<section class="w-full h-full p-4">
-    <div class="w-full flex flex-col border-2 rounded-2xl border-gray-700 bg-transparent shadow-lg overflow-hidden">
-        
-        
+<section class="mx-auto max-w-6xl">
+
+  @if (loading()) {
+    <div class="space-y-4">
+      <div class="skeleton h-10 w-64 rounded-lg"></div>
+      <div class="skeleton h-48 w-full rounded-xl"></div>
     </div>
+  } @else {
+    <header class="mb-6">
+      <p class="text-xs font-medium uppercase tracking-widest text-primary/80">Tablero</p>
+      <h2 class="mt-1 text-2xl font-bold text-base-content">Detalle del board</h2>
+    </header>
+
+    @if (boardData().columns.length) {
+      <div class="mb-4 flex gap-2 overflow-x-auto rounded-lg border border-base-300/60 bg-base-200/40 p-3">
+        @for (column of boardData().columns; track column.id) {
+          <span class="shrink-0 rounded-md bg-base-100/50 px-3 py-1.5 text-xs font-medium text-base-content/75">
+            {{ column.title }}
+          </span>
+        }
+      </div>
+    }
+
+    <div class="space-y-3">
+      @for (groupId of groupTitles(); track groupId) {
+        @let items = groupItems().get(groupId);
+        <div class="collapse collapse-arrow rounded-xl border border-base-300/60 bg-base-200/40">
+          <input type="checkbox" checked />
+          <div class="collapse-title font-semibold text-sm">Grupo {{ groupId }}</div>
+          <div class="collapse-content">
+            @if (items?.length) {
+              <ul class="divide-y divide-base-300/40">
+                @for (item of items; track item.id) {
+                  <li class="flex items-center gap-3 py-3 text-sm">
+                    <span class="font-medium text-base-content">{{ item.id }}</span>
+                    <span class="text-base-content/50">{{ item.column_values.length ?? 0 }} columnas</span>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="py-2 text-xs text-base-content/45">Sin items en este grupo</p>
+            }
+          </div>
+        </div>
+      } @empty {
+        <div class="rounded-xl border border-dashed border-base-300/80 p-10 text-center text-sm text-base-content/50">
+          No hay grupos para mostrar
+        </div>
+      }
+    </div>
+  }
 </section>
