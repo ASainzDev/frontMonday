@@ -38,6 +38,8 @@ export class WorkBoardListComponent implements OnInit {
 
         if (boardList) {
           this.boards.set(boardList);
+        }else{
+          return console.log("No se ha recibido ningún dato de la petición requerida");
         }
 
       });
