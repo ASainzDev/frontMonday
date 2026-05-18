@@ -38,6 +38,8 @@ export interface Column {
 
 export interface Settings {
   labels?: Label[]
+  limit_select?: boolean,
+  label_limit_count?: number,
   allowCreateReflectionColumn?: boolean
   boardIds?: number[]
 }
