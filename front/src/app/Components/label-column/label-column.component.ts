@@ -9,10 +9,12 @@ import { Column } from '../../interfaces/DTO/board-data.interface';
 })
 export class LabelColumnComponent implements OnInit{
 
+  // Estas son las settings de una columna de tipo label, por lo tanto debo de recibirlo mediante un ouput
   @Input() columnSetting!: Column;
-  
-  @Input() columnValue!: number;
 
+  // Este valor solo está aquí para poder saber cuales son las seleccionadas
+  @Input() values!: any;
+  
   // Creo un mapa que llevará un number, para el id del label, y un string para su texto.
   opcionesDropdown: Map<number, {label: string, selected: boolean}> = new Map();
 
@@ -52,8 +54,20 @@ export class LabelColumnComponent implements OnInit{
     }
   }
 
+  // Según el valor que nos llega de values tenemos un array que nos indica cuales están seleccionadas y cual no.
   displaySelectedValues(){
 
+    if(this.values !== undefined){
+      this.values.ids.forEach((index: number) =>{
+
+        const valores = {
+          label: this.opcionesDropdown.get(index)?.label,
+          selected: true,
+        }
+
+        this.opcionesDropdown.set(index, valores);
+      })
+    }
   }
   
 }
