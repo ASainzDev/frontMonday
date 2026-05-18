@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './board.component.html',
 })
 export class BoardComponent implements OnInit {
-  groupTitles = signal<string[]>([]);
+  groupTitles = signal<{id: string, title: string, color: string}[]>([]);
   groupItems = signal<Map<string, Item[]>>(new Map());
   boardS = inject(BoardService);
   boardData = signal<BoardData>({ groups: [], columns: [] });
@@ -21,8 +21,6 @@ export class BoardComponent implements OnInit {
     this.activeR.params.subscribe((param: { board_id?: string }) => {
       this.board_id = param.board_id ?? '';
 
-      console.log(this.board_id);
-
       if (!this.board_id) {
         this.loading.set(false);
         return;
@@ -31,31 +29,31 @@ export class BoardComponent implements OnInit {
       this.loading.set(true);
       this.boardS.getBoardData(Number(this.board_id)).subscribe({
         next: (data) => {
-          console.log(data);
           if (!data) {
             this.loading.set(false);
             return;
           }
 
-          const groups = data.groups[0];
-          console.log(groups);
           this.boardData.set(data);
-          console.log(this.boardData());
+          console.log(data);
 
-          console.log(this.boardData().groups);
-
-          const titles: string[] = [];
+          const titles: {id: string, title: string, color: string}[] = [];
           const itemsMap = new Map<string, Item[]>();
 
           data.groups.forEach((group) => {
-            titles.push(group.id);
+            const groupData = {
+              id: group.id,
+              title: group.title,
+              color: group.color
+            }
+
+            titles.push(groupData);
             itemsMap.set(group.id, group.items_page?.items ?? []);
           });
 
           this.groupTitles.set(titles);
-          console.log(titles);
           this.groupItems.set(itemsMap);
-          console.log(itemsMap);
+          console.log(this.groupItems());
           this.loading.set(false);
         },
         error: () => this.loading.set(false),

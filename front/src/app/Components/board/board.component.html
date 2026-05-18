@@ -11,7 +11,9 @@
       <h2 class="mt-1 text-2xl font-bold text-base-content">Detalle del board</h2>
     </header>
 
-    @if (boardData().columns.length) {
+    <!-- Dejo esto comentado por si hacemos algún cambio más tarde. La idea es usar pinned-tables de DaisyUI por cada grupo, dentro de un Desplegable. -->
+
+    <!-- @if (boardData().columns.length) {
       <div class="mb-4 flex gap-2 overflow-x-auto rounded-lg border border-base-300/60 bg-base-200/40 p-3">
         @for (column of boardData().columns; track column.id) {
           <span class="shrink-0 rounded-md bg-base-100/50 px-3 py-1.5 text-xs font-medium text-base-content/75">
@@ -19,9 +21,52 @@
           </span>
         }
       </div>
+    } -->
+
+    @for(group of this.groupTitles(); track group.id){
+        <div tabindex="0" class="collapse collapse-arrow bg-base-100 border-base-300 border">
+            <div class="collapse-title font-bold border-2" [style.color]="group.color">{{group.title}}</div>
+            <div class="collapse-content text-sm">
+               <div class="overflow-x-auto h-96 w-auto">
+                <table class="table table-auto table-pin-rows table-pin-cols">
+                    <thead>
+                        <div class="table-row">
+                            
+                            @for(column of this.boardData().columns; track column.id){
+                                <td>{{column.title}}</td>
+                            }
+                            
+                        </div>
+                    </thead>
+
+                    <tbody>
+                        
+                            @let item = this.groupItems().get(group.id);
+                            @if(item === undefined){
+                                <span>No hay items en este Grupo del board.</span>
+                            }@else {
+                                
+                                    @for(element of item; track element.id){
+                                        <tr>
+                                            <td>{{element.name}}</td>
+                                        @for(value of element.column_values; track value.id){
+                                            <td>{{value.text}}</td>
+                                        }
+                                        </tr>
+                                    }
+                                
+                            }
+                        
+                    </tbody>
+                </table>
+               </div>
+            </div>
+        </div>
+    }@empty {
+        <span>No se han creado grupos en este tablero.</span>
     }
 
-    <div class="space-y-3">
+    <!-- <div class="space-y-3">
       @for (groupId of groupTitles(); track groupId) {
         @let items = groupItems().get(groupId);
         <div class="collapse collapse-arrow rounded-xl border border-base-300/60 bg-base-200/40">
@@ -47,6 +92,6 @@
           No hay grupos para mostrar
         </div>
       }
-    </div>
+    </div> -->
   }
 </section>

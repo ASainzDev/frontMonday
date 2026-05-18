@@ -6,6 +6,8 @@ export interface BoardData {
 
 export interface Group {
   id: string
+  title: string
+  color: string
   items_page: ItemsPage
 }
 
@@ -16,6 +18,7 @@ export interface ItemsPage {
 
 export interface Item {
   id: string
+  name: string
   column_values: ColumnValue[]
 }
 
