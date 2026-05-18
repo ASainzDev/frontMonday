@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BoardService } from '../../services/board.service';
 import { Board } from '../../interfaces/workspace.interface';
 
@@ -9,8 +9,10 @@ import { Board } from '../../interfaces/workspace.interface';
   templateUrl: './work-board-list.component.html',
 })
 export class WorkBoardListComponent implements OnInit {
+
   private activeR = inject(ActivatedRoute);
   private boardService = inject(BoardService);
+  private router: Router = inject(Router);
 
   workspaceId = signal('');
   boards = signal<Partial<Board>[]>([]);
@@ -32,7 +34,7 @@ export class WorkBoardListComponent implements OnInit {
 
       this.boardService.getBoardsOfAWorkspace(id).subscribe({
         next: (boardList) => {
-          this.boards.set(boardList ?? []);
+          this.boards.set(boardList);
           this.loading.set(false);
         },
         error: () => {
@@ -41,5 +43,13 @@ export class WorkBoardListComponent implements OnInit {
         },
       });
     });
+  }
+
+  // Navegación al display de la información del tablero
+  goToBoardDisplay(board_id : string | undefined) {
+    
+    if(board_id){
+      this.router.navigate(['/home/board/display', board_id]);
+    }
   }
 }

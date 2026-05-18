@@ -21,6 +21,8 @@ export class BoardComponent implements OnInit {
     this.activeR.params.subscribe((param: { board_id?: string }) => {
       this.board_id = param.board_id ?? '';
 
+      console.log(this.board_id);
+
       if (!this.board_id) {
         this.loading.set(false);
         return;
@@ -29,12 +31,18 @@ export class BoardComponent implements OnInit {
       this.loading.set(true);
       this.boardS.getBoardData(Number(this.board_id)).subscribe({
         next: (data) => {
+          console.log(data);
           if (!data) {
             this.loading.set(false);
             return;
           }
 
+          const groups = data.groups[0];
+          console.log(groups);
           this.boardData.set(data);
+          console.log(this.boardData());
+
+          console.log(this.boardData().groups);
 
           const titles: string[] = [];
           const itemsMap = new Map<string, Item[]>();
@@ -45,7 +53,9 @@ export class BoardComponent implements OnInit {
           });
 
           this.groupTitles.set(titles);
+          console.log(titles);
           this.groupItems.set(itemsMap);
+          console.log(itemsMap);
           this.loading.set(false);
         },
         error: () => this.loading.set(false),
