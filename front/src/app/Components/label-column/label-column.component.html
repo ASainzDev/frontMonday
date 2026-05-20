@@ -1,28 +1,23 @@
 <div class="dropdown">
-  <div tabindex="0" role="button" class="btn m-1">Seleccionar opciones</div>
-  
-  <ul tabindex="0" class="dropdown-content z-1 menu p-2 shadow bg-base-100 rounded-box w-52">
-    
-    <li>
-      <label class="label cursor-pointer justify-start gap-3">
-        <input type="checkbox" class="checkbox checkbox-primary" />
-        <span class="label-text">Opción 1</span>
-      </label>
-    </li>
-    
-    <li>
-      <label class="label cursor-pointer justify-start gap-3">
-        <input type="checkbox" class="checkbox checkbox-primary" checked="checked" />
-        <span class="label-text">Opción 2</span>
-      </label>
-    </li>
-    
-    <li>
-      <label class="label cursor-pointer justify-start gap-3">
-        <input type="checkbox" class="checkbox checkbox-primary" />
-        <span class="label-text">Opción 3</span>
-      </label>
-    </li>
+  <div tabindex="0" role="button" class="btn m-1">Select Label</div>
+  <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
 
+    @for(label of this.opcionesDropdown | keyvalue; track label.key){
+      <label class="label cursor-pointer justify-start gap-3">
+      <input 
+        [type]="tipo" 
+        [name]="'etiquetas_' + columnSetting.id"
+        class="checkbox" 
+        [(ngModel)]="label.value.selected"
+        hidden="true" 
+      />
+      @if(this.counter() > 1){
+        <span class="label-text">{{ label.value.label }} <div class="badge badge-sm badge-secondary">+{{this.counter() - 1}}</div></span>
+      }@else {
+        <span class="label-text">{{ label.value.label }} </span>
+      }
+      
+    </label>
+  }
   </ul>
 </div>
